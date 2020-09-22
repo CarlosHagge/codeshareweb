@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "header.html" %}
+
+<!-- Begin page content -->
+<main role="main" class="container">
+
+    <table class="table table-hover table-bordered mt-4">
+        <thead>
+            <tr>
+            <th scope="col">Questão</th>
+            <th scope="col">Usuário</th>
+            <th scope="col">Data</th>
+            <th scope="col">Status</th>
+            <th scope="col">Pontos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in posts %}
+            <tr>
+                <td>
+                    <a href='/post/{{ p.pk }}'>
+                        {{ p.titulo}}
+                    </a>
+                </td>
+                <td>
+                    <a href='/perfil/{{ p.usuario.pk }}'>
+                        {{ p.usuario.get_username}}
+                    </a>
+                </td>
+                <td>{{ p.data_hora_postagem }}</td>
+                
+                <td>
+                    {% if p.aberto %}
+                        Aberta
+                    {% else %}
+                        Respondida
+                    {% endif %}
+                </td>
+                
+                <td>
+                    <div class="badge badge-success px-2 my-1">
+                        {{ p.n_likes }} ↑
+                    </div>
+
+                    <div class="badge badge-danger px-2 my-1">
+                        {{ p.n_dislikes }} ↓
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</main>
+
+{% endblock %}

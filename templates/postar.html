@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "header.html" %}
+
+<!-- Begin page content -->
+<main role="main" class="container">
+  <h1 class="mt-4">
+    Criar nova postagem
+  </h1>
+
+  <hr>
+
+  {% load crispy_forms_tags %}
+
+  <form method="post" enctype="multipart/form-data">
+      {{ form|crispy }}
+
+      <p class="text-muted text-right">
+        Os campos marcados com (*) são obrigatórios.
+      </p>
+
+      <hr>
+      
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Postar questão</button>
+      {% csrf_token %}
+  </form>
+
+</main>
+{% endblock %}

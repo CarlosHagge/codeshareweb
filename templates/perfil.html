@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "header.html" %}
+
+<!-- Begin page content -->
+<main role="main" class="container">
+  <h1 class="mt-4">
+    Perfil de: {{ perfil.get_username }}
+  </h1>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      <span class="text-muted">Data de registro: </span>
+      {{ perfil.date_joined }}
+    </li>
+    <li class="list-group-item">
+      <span class="text-muted">Data de nascimento: </span>
+      {{ perfil.maratonista.data_nascimento|default:"<em>Não informado</em>" }}
+    </li>
+    <li class="list-group-item">
+      <span class="text-muted">Faculdade: </span>
+      {{ perfil.maratonista.faculdade|default:"<em>Não informado</em>" }}
+    </li>
+  </ul>
+
+  <hr>
+
+  {% if perfil == user %}
+    <h2 class='mt-5'>Editar Informações</h2>
+      
+    {% load crispy_forms_tags %}
+
+    <form method="post">
+    
+        {{ form|crispy }}
+        
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Confirmar</button>
+        {% csrf_token %}
+        <hr>
+
+    </form>
+
+  {% endif %}
+
+</main>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Begin page content -->
+<main role="main" class="container">
+
+  <div class="row justify-content-center align-items-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card mt-5">
+        <form class="card-body" method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+
+          <h1 class="font-weight-normal card-title mt-4 mb-5">Login de usuário</h1>
+
+          <label for="inputUser" class="sr-only">Nome de usuário</label>
+          <input type="text" name="username" id="inputUser" class="form-control mt-3" placeholder="Nome de usuário" required autofocus>
+          <label for="inputPassword" class="sr-only">Senha</label>
+          <input type="password" name="password" id="inputPassword" class="form-control mt-3" placeholder="Senha" required>
+          
+          <input class="btn btn-lg btn-primary btn-block mt-3" type="submit" value="login">
+          <input type="hidden" name="next" value="{{ next }}">
+
+          <div class="text-right mt-3">
+            <a href='/registrar'>Não possui conta? Clique aqui para se registrar.</a>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+{% endblock %}
