@@ -10,7 +10,7 @@ from .permissions import IsStaffOrTargetUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('password', 'username',)
+        fields = ('password', 'username', 'email',)
         write_only_fields = ('password',)
         read_only_fields = ('is_staff', 'is_superuser', 'is_active', 'date_joined',)
  
