@@ -7,7 +7,7 @@ from . import models
 class PostagemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Postagem
-        fields = ['id', 'data_hora_postagem', 'titulo', 'enunciado', 'url_imagem', 'n_likes', 'n_dislikes', 'comments', 'email']
+        fields = ['id', 'data_hora_postagem', 'titulo', 'enunciado', 'image', 'n_likes', 'n_dislikes', 'comments', 'email']
 
 
 class PostagemViewSet(viewsets.ModelViewSet):
