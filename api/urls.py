@@ -34,6 +34,7 @@ class UserView(viewsets.ModelViewSet):
         return User.objects.all()
 
 class UserExistsView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
     model = User
 
     def get(self, request, *args, **kwargs):
