@@ -51,7 +51,11 @@ class Postagem(models.Model):
 		tmp_list = []
 		comentarios = Comentario.objects.filter(postagem=self)
 		for c in comentarios:
-			tmp_list.append({'nickname': c.usuario.username, 'comment': c.texto_comentario})
+			tmp_list.append({'nickname': c.usuario.username,
+			'comment': c.texto_comentario,
+			'n_likes': c.n_likes,
+			'n_dislikes': c.n_dislikes})
+
 		return tmp_list
 
 	class Meta:
