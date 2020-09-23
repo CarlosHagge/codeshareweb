@@ -45,11 +45,7 @@ class Postagem(models.Model):
 	def email(self):
 		# returna nome de usuario
 		return self.usuario.username
-
-	@property
-	def image(self):
-		return self.url_imagem
-
+	
 	@property
 	def comments(self):
 		tmp_list = []
