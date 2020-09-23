@@ -2,6 +2,7 @@ from django.urls import path, include
 from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny
 from rest_framework import routers, serializers, viewsets
+from rest_framework.response import Response
 
 from . import views
 from . import models
@@ -28,6 +29,29 @@ class UserView(viewsets.ModelViewSet):
         # allow non-authenticated user to create via POST
         return (AllowAny() if self.request.method == 'POST'
                 else IsStaffOrTargetUser()),
+    
+    def get_queryset(self):
+        return User.objects.all()
+
+class UserExistsView(viewsets.ModelViewSet):
+    model = User
+
+    def get(self, request, *args, **kwargs):
+        # use this if username is in url kwargs
+        username = self.kwargs.get('username')
+        password = self.kwargs.get('password')
+
+        # use this if username is being sent as a query parameter
+        username = self.request.query_params.get('username')
+
+        try:
+            user = User.objects.get(username=username) # retrieve the user using username
+            if user.validate(password):
+                return Response(data={'message':True})
+        except User.DoesNotExist:
+            return Response(data={'message':False}) # return false as user does not exist
+        else:
+            return Response(data={'message':False}) # Otherwise, return True
 
 class PostagemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -55,6 +79,7 @@ router = routers.DefaultRouter()
 router.register(r'postagens', PostagemViewSet)
 router.register(r'comentarios', ComentarioViewSet)
 router.register(r'accounts', UserView, 'list')
+router.register(r'usuario_login', UserExistsView, basename='User')
 
 
 urlpatterns = [
