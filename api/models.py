@@ -40,6 +40,19 @@ class Postagem(models.Model):
 	@property
 	def n_dislikes(self):
 		return VotoPostagem.objects.filter(postagem=self, positivo=False).count()
+	
+	@property
+	def email(self):
+		# returna nome de usuario
+		return self.usuario.username
+
+	@property
+	def comentarios(self):
+		tmp_list = []
+		comentarios = Comentario.objects.filter(postagem=self)
+		for c in comentarios:
+			tmp_list.append({'nickname': c.usuario.username, 'comment': c.texto_comentario})
+		return tmp_list
 
 	class Meta:
 		ordering = ['-data_hora_postagem']
