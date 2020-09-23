@@ -47,6 +47,10 @@ class Postagem(models.Model):
 		return self.usuario.username
 
 	@property
+	def image(self):
+		return self.url_imagem
+
+	@property
 	def comments(self):
 		tmp_list = []
 		comentarios = Comentario.objects.filter(postagem=self)
