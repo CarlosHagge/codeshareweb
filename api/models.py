@@ -47,7 +47,7 @@ class Postagem(models.Model):
 		return self.usuario.username
 
 	@property
-	def comentarios(self):
+	def comments(self):
 		tmp_list = []
 		comentarios = Comentario.objects.filter(postagem=self)
 		for c in comentarios:
