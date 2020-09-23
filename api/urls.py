@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from . import views
 from . import models
 from .permissions import IsStaffOrTargetUser
+from .views import check_user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,17 +43,19 @@ class UserExistsView(viewsets.ModelViewSet):
         username = self.kwargs.get('username')
         password = self.kwargs.get('password')
 
+        print(self.kwargs)
+
         # use this if username is being sent as a query parameter
         username = self.request.query_params.get('username')
 
         try:
             user = User.objects.get(username=username) # retrieve the user using username
             if user.validate(password):
-                return Response(data={'message':True})
+                return Response({'message':True})
         except User.DoesNotExist:
-            return Response(data={'message':False}) # return false as user does not exist
+            return Response({'message':False}) # return false as user does not exist
         else:
-            return Response(data={'message':False}) # Otherwise, return True
+            return Response({'message':False}) # Otherwise, return True
 
 class PostagemSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -80,9 +83,9 @@ router = routers.DefaultRouter()
 router.register(r'postagens', PostagemViewSet)
 router.register(r'comentarios', ComentarioViewSet)
 router.register(r'accounts', UserView, 'list')
-router.register(r'usuario_login', UserExistsView, basename='User')
 
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('usuario_login', views.check_user)
 ]
