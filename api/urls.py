@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import AllowAny
 from rest_framework import routers, serializers, viewsets
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 from . import models
@@ -87,5 +88,5 @@ router.register(r'accounts', UserView, 'list')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('usuario_login', views.check_user)
+    path('usuario_login/',csrf_exempt(views.check_user))
 ]
