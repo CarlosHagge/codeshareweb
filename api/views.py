@@ -24,13 +24,13 @@ def check_user(request):
 
 def postar(request):
     print(request.body)
-    
+
     json_data = json.loads(request.body.decode())
 
     print(json_data)
     
-    image_b64 = json_data['url_imagem'] # This is your base64 string image
-    fmt, imgstr = image_b64.split(';base64,')
+    imgstr = json_data['url_imagem']['data']
+    fmt = json_data['url_imagem']['type']
     ext = fmt.split('/')[-1]
     data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
 
