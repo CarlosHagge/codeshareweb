@@ -19,3 +19,7 @@ def check_user(request):
         print("a4")
     return JsonResponse({'message': False})
 
+def postar(request):
+    print(request.body)
+    return JsonResponse({'message': 'Teste'}) 
+

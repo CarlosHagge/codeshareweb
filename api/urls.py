@@ -10,6 +10,49 @@ from . import models
 from .permissions import IsStaffOrTargetUser
 from .views import check_user
 
+from rest_framework import serializers    
+
+class Base64ImageField(serializers.ImageField):
+    """
+    A Django REST framework field for handling image-uploads through raw post data.
+    It uses base64 for encoding and decoding the contents of the file.
+
+    Heavily based on
+    https://github.com/tomchristie/django-rest-framework/pull/1268
+
+    Updated for Django REST framework 3.
+    """
+
+    def to_internal_value(self, data):
+        from django.core.files.base import ContentFile
+        import base64 
+        import uuid
+
+        # Try to decode the file. Return validation error if it fails.
+        try:
+            decoded_file = base64.b64decode(data)
+        except TypeError:
+            self.fail('invalid_image')
+
+        # Generate file name:
+        file_name = str(uuid.uuid4())[:12] # 12 characters are more than enough.
+        # Get the file name extension:
+        file_extension = self.get_file_extension(file_name, decoded_file)
+
+        complete_file_name = "%s.%s" % (file_name, file_extension, )
+
+        data = ContentFile(decoded_file, name=complete_file_name)
+
+        return super(Base64ImageField, self).to_internal_value(data)
+
+    def get_file_extension(self, file_name, decoded_file):
+        import imghdr
+
+        extension = imghdr.what(file_name, decoded_file)
+        extension = "jpg" if extension == "jpeg" else extension
+
+        return extension
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -69,6 +112,10 @@ class PostagemSerializer(serializers.ModelSerializer):
 
 
 class PostagemViewSet(viewsets.ModelViewSet):
+    url_imagem = Base64ImageField(
+        max_length=None, use_url=True,
+    )
+
     queryset = models.Postagem.objects.all()
     serializer_class = PostagemSerializer
 
@@ -92,5 +139,7 @@ router.register(r'accounts', UserView, 'list')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('usuario_login/',csrf_exempt(views.check_user))
+    path('usuario_login/',csrf_exempt(views.check_user)),
+    path('postar/',csrf_exempt(views.postar))
+
 ]
