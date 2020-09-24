@@ -13,7 +13,7 @@ def check_user(request):
         print("a3")
         
         if user.check_password(json_data['password']):
-            return JsonResponse({'message': True})
+            return JsonResponse({'message': True, 'id': user.pk})
         else:
             return JsonResponse({'message': False})
         print("a4")
