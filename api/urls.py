@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-        
+
 class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     model = User
@@ -34,6 +34,7 @@ class UserView(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return User.objects.all()
+
 
 class UserExistsView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
@@ -58,10 +59,13 @@ class UserExistsView(viewsets.ModelViewSet):
         else:
             return Response({'message':False}) # Otherwise, return True
 
-class PostagemSerializer(serializers.HyperlinkedModelSerializer):
+
+
+class PostagemSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = models.Postagem
-        fields = ['id', 'data_hora_postagem', 'titulo', 'enunciado', 'url_imagem', 'n_likes', 'n_dislikes', 'comments', 'usuario']
+        fields = ['id', 'data_hora_postagem', 'titulo', 'enunciado', 'url_imagem', 'n_likes', 'n_dislikes', 'comments', 'usuario', 'email']
 
 
 class PostagemViewSet(viewsets.ModelViewSet):
@@ -69,10 +73,10 @@ class PostagemViewSet(viewsets.ModelViewSet):
     serializer_class = PostagemSerializer
 
 
-class ComentarioSerializer(serializers.HyperlinkedModelSerializer):
+class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Comentario
-        fields = ['id', 'data_hora_comentario', 'texto_comentario', 'postagem']
+        fields = ['id', 'data_hora_comentario', 'texto_comentario', 'postagem', 'usuario']
 
 
 class ComentarioViewSet(viewsets.ModelViewSet):
